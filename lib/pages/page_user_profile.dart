@@ -2,22 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_france_partage.dart';
-import 'package:france_partage/component/card_components/card_post.dart';
-import 'package:france_partage/component/card_components/card_profile_summary.dart';
-import 'package:france_partage/component/card_components/card_relation.dart';
 import 'package:france_partage/component/component_app_appbar.dart';
 import 'package:france_partage/component/component_safe_padding.dart';
 import 'package:france_partage/models/app_user_infos.dart';
 
+import '../component/card_components/card_profile_summary.dart';
 import '../component/component_app_drawer.dart';
 import '../models/app_global.dart';
-import '../ressources/app_utils.dart';
+import '../resources/app_utils.dart';
 
 class PageUserProfile extends StatefulWidget {
-  final String mail;
+  final int id;
   String? selectedTab;
-  PageUserProfile({Key? key, required this.mail}) : super(key: key) {
-    selectedTab = "ressources";
+  PageUserProfile({Key? key, required this.id}) : super(key: key) {
+    selectedTab = "resources";
   }
 
   @override
@@ -42,12 +40,8 @@ class _PageUserProfileState extends State<PageUserProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppAppbar(
-        avatar: AppUtils.getImageLink(AppGlobal.userInfos!.avatar!),
-      ),
-      endDrawer: AppDrawer(
-        mail: AppGlobal.userInfos!.email!,
-      ),
+      appBar: AppAppbar(),
+      endDrawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -65,12 +59,11 @@ class _PageUserProfileState extends State<PageUserProfile> {
   Future<void> getProfileInfos() async{
     ApiFrancePartage api = ApiFrancePartage();
 
-    Map<String, dynamic> mapInfos = await api.getProfileInfos(widget.mail);
-
-    var dataInfos = jsonDecode(mapInfos["body"])["data"];
+    Map<String, dynamic> mapInfos = await api.getUserInfos(widget.id);
+    var dataInfos = jsonDecode(mapInfos["body"]);
 
     infos = dataInfos;
-    await getRelations();
+    //await getRelations();
     setState(() {});
   }
 
@@ -81,10 +74,11 @@ class _PageUserProfileState extends State<PageUserProfile> {
       );
     } else {
       return CardProfileSummary(
-          username: infos["firstName"] + " " + infos["lastName"],
-          avatar: AppUtils.getImageLink(infos["avatar"]),
-          nbRessources: infos["resourcesCount"],
-          nbRelations: infos["relationsCount"],
+          id: infos["id"],
+          username: infos["displayName"],
+          avatar: AppUtils.getAvatarLink(infos["avatar"]),
+          nbRessources: 0,//infos["resourcesCount"],
+          nbRelations: 0, //infos["relationsCount"],
           callback: changeTab,
           selectedTab: widget.selectedTab!
       );
@@ -92,7 +86,7 @@ class _PageUserProfileState extends State<PageUserProfile> {
   }
 
   List<Widget> getContent() {
-    if(widget.selectedTab == "ressources") {
+    if(widget.selectedTab == "resources") {
       return resourcesList;
     }
     if(widget.selectedTab == "relations") {
@@ -107,6 +101,7 @@ class _PageUserProfileState extends State<PageUserProfile> {
     resourcesList =  res;
   }
 
+  /*
   Future<void> getRelations() async {
     ApiFrancePartage api = ApiFrancePartage();
     List<Widget> res = [];
@@ -115,7 +110,7 @@ class _PageUserProfileState extends State<PageUserProfile> {
       SizedBox(height: 10,)
     );
 
-    Map<String,dynamic> mapRelations = await api.getUserRelations(widget.mail);
+    Map<String,dynamic> mapRelations = await api.getUserRelations(widget.id);
     dynamic jsonData = jsonDecode(mapRelations["body"])["data"];
 
     for(var data in jsonData) {
@@ -150,6 +145,8 @@ class _PageUserProfileState extends State<PageUserProfile> {
 
     relationsList = res;
   }
+
+   */
 
   void changeTab(String tab) {
     if(widget.selectedTab == tab) {

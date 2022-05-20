@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:france_partage/pages/page_home.dart';
 import '../api/api_france_partage.dart';
 import '../component/text_components/app_text.dart';
 import '../pages/page_log_in.dart';
-import '../ressources/app_colors.dart';
+import '../resources/app_colors.dart';
 import '../component/text_components/app_textfield.dart';
+import '../resources/app_utils.dart';
 
 class PageRegister extends StatefulWidget {
   const PageRegister({Key? key}) : super(key: key);
@@ -17,9 +20,9 @@ class PageRegister extends StatefulWidget {
 class _PageRegisterState extends State<PageRegister> {
 
   TextEditingController mailCtrl = TextEditingController();
+  TextEditingController usernameCtrl = TextEditingController();
   TextEditingController lastnameCtrl = TextEditingController();
   TextEditingController firstnameCtrl = TextEditingController();
-  //TextEditingController birthdateCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   TextEditingController passwordConfirmCtrl = TextEditingController();
 
@@ -47,7 +50,7 @@ class _PageRegisterState extends State<PageRegister> {
             ),
             const Padding(
               padding: EdgeInsets.fromLTRB(0,0,0,20),
-              child:Text("Sign-up",
+              child:Text("Inscription",
                 style: TextStyle(
                   color: AppColors.DARK_900,
                   fontSize: 24,
@@ -61,8 +64,9 @@ class _PageRegisterState extends State<PageRegister> {
               size: 16,
             ),
             AppTextField(labelText: "E-mail", hintText: "test@test.fr", textController: mailCtrl),
-            AppTextField(labelText: "Nom", hintText: "Roger", textController: lastnameCtrl),
-            AppTextField(labelText: "Prénom", hintText: "Rémi", textController: firstnameCtrl,),
+            AppTextField(labelText: "Nom d'utilisateur", hintText: "Pseudonyme", textController: usernameCtrl,),
+            AppTextField(labelText: "Prénom", hintText: "John", textController: firstnameCtrl,),
+            AppTextField(labelText: "Nom", hintText: "Doe", textController: lastnameCtrl),
             AppTextField(labelText: "Mot de passe", hintText: "******", textController: passwordCtrl, obscureText: true,),
             AppTextField(labelText: "Confirmation mot de passe", hintText: "******", textController: passwordConfirmCtrl, obscureText: true,),
             Padding(
@@ -75,7 +79,7 @@ class _PageRegisterState extends State<PageRegister> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
-                      register();
+                      registerCheck();
                     },
                     child: const Text("Valider",
                       style: TextStyle(
@@ -109,15 +113,16 @@ class _PageRegisterState extends State<PageRegister> {
     );
   }
 
-  void register() async {
-    ApiFrancePartage api = ApiFrancePartage();
+  void registerCheck() async {
     errorMsg = "";
 
     String mail = mailCtrl.text.trim();
-    String firstname = firstnameCtrl.text;
-    String lastname = lastnameCtrl.text;
     String password = passwordCtrl.text;
     String passwordConfirm = passwordConfirmCtrl.text;
+
+    if(!checkEmpty(mail, "mail") || !checkEmpty(usernameCtrl.text, "pseudonyme") || !checkEmpty(firstnameCtrl.text, "prénom") || !checkEmpty(lastnameCtrl.text, "nom") || !checkEmpty(password, "mot de passe")) {
+      return;
+    }
 
     if( !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(mail) ) {
       setState(() {
@@ -125,26 +130,97 @@ class _PageRegisterState extends State<PageRegister> {
       });
     } else if ( password != passwordConfirm ) {
       setState(() {
-        errorMsg = "Passwords not the same";
+        errorMsg = "Les mots de passe ne correspondent pas";
       });
     } else {
-      Map<String, dynamic> mapRegister = await api.register(mail: mail, password: password, firstname: firstname, lastname: lastname);
+      setState(() {
+        errorMsg = "";
+      });
 
-      bool success = jsonDecode(mapRegister["body"])["success"];
-      if(success) {
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (BuildContext context){
-            return PageLogIn();
-          })
-        );
-      } else {
-        String error = jsonDecode(mapRegister["body"])["message"];
-        setState(() {
-          errorMsg = error;
-        });
-      }
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Confidentialité'),
+          content: const Text("J'accepte d'afficher mon nom et prénom en public"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'Refuser');
+                registerUser(false);
+              },
+              child: const AppText(
+                "Refuser",
+                size: 20,
+                color: AppColors.DARK_800,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, 'Accepter');
+                registerUser(true);
+              },
+              child: const AppText(
+                "Accepter",
+                size: 20,
+                color: AppColors.BLUE,
+              ),
+            ),
+          ],
+        ),
+      );
     }
+  }
+
+  void registerUser(bool rgpd) async {
+    ApiFrancePartage api = ApiFrancePartage();
+
+    String mail = mailCtrl.text.trim();
+    String username = usernameCtrl.text;
+    String firstname = firstnameCtrl.text;
+    String lastname = lastnameCtrl.text;
+    String password = passwordCtrl.text;
+
+    Map<String, dynamic> mapRegister = await api.register(mail: mail, password: password, username: username, firstname: firstname, lastname: lastname, acceptRgpd: rgpd);
+
+    if(mapRegister["code"] == 201) {
+      setState(() {
+        errorMsg = "";
+      });
+
+      final storage = new FlutterSecureStorage();
+      await storage.write(key: "accessToken", value: jsonDecode(mapRegister["body"])["accessToken"]);
+      await storage.write(key: "refreshToken", value: jsonDecode(mapRegister["body"])["refreshToken"]);
+
+      await AppUtils.getUserInfos();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return PageHome();
+        })
+      );
+    } else {
+      print(mapRegister["body"]);
+      errorMsg = "";
+      setState(() {
+        if(jsonDecode(mapRegister["body"])["message"] is List<dynamic>) {
+          jsonDecode(mapRegister["body"])["message"].forEach((element) => {
+            errorMsg += "\n" + element
+          });
+        } else {
+          errorMsg = jsonDecode(mapRegister["body"])["message"];
+        }
+      });
+    }
+  }
+
+  bool checkEmpty(String content, String field) {
+    if(content.isEmpty) {
+      setState(() {
+        errorMsg = "Votre " + field + " ne doit pas être vide";
+      });
+      return false;
+    }
+    return true;
   }
 }

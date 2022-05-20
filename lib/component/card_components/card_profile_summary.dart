@@ -1,31 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../component/component_profile_picture.dart';
 import '../../component/text_components/app_text.dart';
-import '../../ressources/app_colors.dart';
-
-/*
-class CardProfileSummary extends StatelessWidget {
-  final String username;
-  final int nbRessources;
-  final int nbRelations;
-  final Function(String) callback;
-  const CardProfileSummary(this.callback, {Key? key, required this.username, required this.nbRessources, required this.nbRelations}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ;
-  }
-}
-*/
+import '../../resources/app_colors.dart';
 
 class CardProfileSummary extends StatefulWidget {
+  final int id;
   final String username;
   final String avatar;
   final int nbRessources;
   final int nbRelations;
   final String selectedTab;
   final Function(String) callback;
-  const CardProfileSummary({Key? key, required this.username, required this.nbRessources, required this.nbRelations, required this.callback, required this.selectedTab, required this.avatar}) : super(key: key);
+  const CardProfileSummary({Key? key,required this.id, required this.username, required this.nbRessources, required this.nbRelations, required this.callback, required this.selectedTab, required this.avatar}) : super(key: key);
 
   @override
   _CardProfileSummaryState createState() => _CardProfileSummaryState();
@@ -49,7 +35,8 @@ class _CardProfileSummaryState extends State<CardProfileSummary> {
                 children: [
                   ProfilePicture(
                     link: widget.avatar,
-                    mail: "/",
+                    id: widget.id,
+                    redirect: false,
                     size: 70
                   ),
                   Padding(
@@ -67,12 +54,12 @@ class _CardProfileSummaryState extends State<CardProfileSummary> {
                               children: [
                                 AppText(widget.nbRessources.toString(), size: 32),
                                 const AppText("Ressources", size: 20, color: AppColors.DARK_600),
-                                getSelectionIndicator(widget.selectedTab == "ressources")
+                                getSelectionIndicator(widget.selectedTab == "resources")
                               ],
                             ),
                           ),
                           onTap: () {
-                            widget.callback("ressources");
+                            widget.callback("resources");
                           },
                         ),
                         InkWell(

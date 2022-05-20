@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:france_partage/ressources/app_colors.dart';
+import 'package:france_partage/api/api_france_partage.dart';
+import 'package:france_partage/models/app_global.dart';
+import 'package:france_partage/resources/app_colors.dart';
 import '../pages/page_log_in.dart';
-import '../pages/page_notification.dart';
-import '../pages/page_parameter.dart';
 import '../pages/page_user_profile.dart';
 import 'text_components/app_text_drawer.dart';
 
 class AppDrawer extends StatelessWidget {
-  final String mail;
-  const AppDrawer({Key? key, required this.mail}) : super(key: key);
+  const AppDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class AppDrawer extends StatelessWidget {
               children:[
                 TextButton(
                     onPressed: () {
-                      goToProfil(context);
+                      goToProfile(context);
                     },
                     child: const AppTextDrawer(text: "Profil")
                 )
@@ -76,35 +75,42 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  void goToProfil(context) {
+  void goToProfile(context) {
     Navigator.push(context,
       MaterialPageRoute(builder: (BuildContext context){
         return PageUserProfile(
-          mail: mail,
+          id: AppGlobal.userInfos!.id!,
         );
       })
     );
   }
 
   void goToNotification(context) {
+    /*
     Navigator.push(context,
       MaterialPageRoute(builder: (BuildContext context){
         return const PageNotification();
       })
     );
+    */
   }
 
   void goToParameter(context) {
+    /*
     Navigator.push(context,
       MaterialPageRoute(builder: (BuildContext context){
         return const PageParameter();
       })
     );
+    */
   }
 
   void returnToLogIn(context) async {
     final storage = new FlutterSecureStorage();
-    await storage.delete(key: "token");
+    ApiFrancePartage api = new ApiFrancePartage();
+    await api.logout();
+    await storage.delete(key: "accessToken");
+    await storage.delete(key: "refreshToken");
     Navigator.push(context,
       MaterialPageRoute(builder: (BuildContext context){
         return const PageLogIn();

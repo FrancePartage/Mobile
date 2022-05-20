@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:france_partage/pages/page_home.dart';
-import 'package:france_partage/pages/page_user_profile.dart';
-import 'package:france_partage/ressources/app_colors.dart';
+import 'package:france_partage/resources/app_colors.dart';
 import 'package:france_partage/pages/page_log_in.dart';
 
 void main() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../ressources/app_colors.dart';
+import '../../resources/app_colors.dart';
 
 class AppText extends StatelessWidget {
 

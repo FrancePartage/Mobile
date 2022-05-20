@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../component/component_profile_picture.dart';
+import 'package:france_partage/models/app_global.dart';
+import 'package:france_partage/resources/app_utils.dart';
 import '../pages/page_home.dart';
-import '../ressources/app_colors.dart';
+import '../resources/app_colors.dart';
+import 'component_profile_picture.dart';
 
 class AppAppbar extends StatefulWidget implements PreferredSizeWidget{
-  final String avatar;
-  const AppAppbar({Key? key, required this.avatar}) : super(key: key);
+  const AppAppbar({Key? key}) : super(key: key);
 
   @override
   _AppAppbarState createState() => _AppAppbarState();
@@ -36,7 +37,7 @@ class _AppAppbarState extends State<AppAppbar> {
             color: AppColors.DARK_900,
           ),
           child: TextField(
-            obscureText: true,
+            style: TextStyle(color: AppColors.WHITE),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 10, left: 10),
               border: const OutlineInputBorder(),
@@ -52,12 +53,13 @@ class _AppAppbarState extends State<AppAppbar> {
       actions: [
         Builder(
           builder: (context) => IconButton(
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              icon: ProfilePicture(
-                link: widget.avatar,
-                mail: "/",
-                size: 16,
-              )
+            onPressed: () => Scaffold.of(context).openEndDrawer(),
+            icon: ProfilePicture(
+              link: AppUtils.getAvatarLink(AppGlobal.userInfos!.avatar!),
+              id: AppGlobal.userInfos!.id!,
+              redirect: false,
+              size: 16,
+            )
           ),
         ),
       ],
@@ -65,9 +67,10 @@ class _AppAppbarState extends State<AppAppbar> {
   }
 
   void returnToHome(context) {
-    Navigator.push(context,
-      MaterialPageRoute(builder: (BuildContext context) {
-        return const PageHome();
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (BuildContext context){
+        return PageHome();
       })
     );
   }

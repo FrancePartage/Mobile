@@ -9,11 +9,12 @@ Application pour la plateforme FrancePartage
 - [ ] Rechercher des ressources
 - [ ] Rechercher des relations
 - [ ] Tags populaires
+
 ### Authentification
 
-- [ ] Connexion
-- [ ] Inscription
-- [ ] Deconnexion
+- [x] Connexion
+- [x] Inscription
+- [x] Deconnexion
 - [ ] Rafraichir les tokens
 
  ### Utilisateurs
@@ -36,7 +37,7 @@ Application pour la plateforme FrancePartage
 - [ ] Ajouter une commentaire
 - [ ] Afficher les ressources d'un utilisateur
 - [ ] Consulter les ressources par tags
-- [ ] Ajouter du CSS pour le contenu (H1, H2, etc.)
+- [ ] Adapter le contenu aux balises (H1, H2, etc.)
 
 ### Relations
 

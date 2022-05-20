@@ -6,11 +6,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/component/text_components/app_text.dart';
 import 'package:france_partage/component/text_components/app_textfield.dart';
+import 'package:france_partage/models/app_global.dart';
 import 'package:france_partage/pages/page_home.dart';
 import 'package:france_partage/pages/page_register.dart';
-import 'package:france_partage/ressources/app_colors.dart';
+import 'package:france_partage/resources/app_colors.dart';
+import '../resources/app_utils.dart';
 
-import '../ressources/app_utils.dart';
 
 class PageLogIn extends StatefulWidget {
   const PageLogIn({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class _PageLogInState extends State<PageLogIn> {
             ),
             const Padding(
               padding: EdgeInsets.fromLTRB(0,0,0,20),
-              child:Text("Log-in",
+              child:Text("Connexion",
                 style: TextStyle(
                   color: AppColors.DARK_900,
                   fontSize: 24,
@@ -126,20 +127,23 @@ class _PageLogInState extends State<PageLogIn> {
     String password = passwordCtrl.text;
 
     Map<String, dynamic> mapLogin = await api.login(mail: mail, password: password);
-    bool success = jsonDecode(mapLogin["body"])["success"];
-    if(success) {
-      errorMsg = "";
-      String token = jsonDecode(mapLogin["body"])["token"];
+
+    if(mapLogin["code"] == 200) {
+      setState(() {
+        errorMsg = "";
+      });
 
       final storage = new FlutterSecureStorage();
-      await storage.write(key: "token", value: token);
+      await storage.write(key: "accessToken", value: jsonDecode(mapLogin["body"])["accessToken"]);
+      await storage.write(key: "refreshToken", value: jsonDecode(mapLogin["body"])["refreshToken"]);
+
       await AppUtils.getUserInfos();
 
       Navigator.push(
-          context,
-          MaterialPageRoute(builder: (BuildContext context){
-            return PageHome();
-          })
+        context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return PageHome();
+        })
       );
     } else {
       String error = jsonDecode(mapLogin["body"])["message"];
@@ -150,6 +154,7 @@ class _PageLogInState extends State<PageLogIn> {
   }
 
   void checkLogin() async {
+    /*
     final storage = new FlutterSecureStorage();
     String? token = await storage.read(key: "token");
 
@@ -163,5 +168,6 @@ class _PageLogInState extends State<PageLogIn> {
         })
       );
     }
+    */
   }
 }

@@ -1,29 +1,20 @@
 class AppUserInfos {
-  String? email;
-  String? firstname;
-  String? lastname;
+  int? id;
+  String? displayName;
+  String? role;
   String? avatar;
-  int? roleId;
-  String? roleLabel;
-  int? rolePower;
 
   AppUserInfos({
-    this.email,
-    this.firstname,
-    this.lastname,
-    this.avatar,
-    this.roleId,
-    this.roleLabel,
-    this.rolePower
+    this.id,
+    this.displayName,
+    this.role,
+    this.avatar
   });
 
   AppUserInfos.fromJson(Map<String, dynamic> json) {
-    email = json['email'];
-    firstname = json['firstName'];
-    lastname = json['lastName'];
+    id = json['id'];
+    displayName = json['displayName'];
+    role = json['role'];
     avatar = json['avatar'];
-    roleId = json["roleId"];
-    roleLabel = json["roleLabel"];
-    rolePower = json["rolePower"];
   }
 }

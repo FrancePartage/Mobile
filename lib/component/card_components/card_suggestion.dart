@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:france_partage/ressources/app_utils.dart';
+import 'package:france_partage/component/text_components/app_text.dart';
+import 'package:france_partage/resources/app_utils.dart';
 import '../../api/api_france_partage.dart';
 import '../../component/component_user_suggestion.dart';
 
@@ -19,9 +21,21 @@ class CardSuggestion extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Padding(
                   padding: EdgeInsets.all(8),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: getWidgets()
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 6, left: 6),
+                        child: AppText(
+                          "Suggestions",
+                          size: 16,
+                        ),
+                      ),
+                      SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: getWidgets()
+                      )
+                    ],
                   ),
                 ),
             ),
@@ -54,17 +68,16 @@ class CardSuggestion extends StatelessWidget {
     usersList.add(const Padding(padding: EdgeInsets.only(left:2)));
 
     Map<String, dynamic> mapUserSuggestions = await api.getUserSuggestions();
-
     var jsonData = jsonDecode(mapUserSuggestions["body"])["data"];
+
     for(var data in jsonData) {
       usersList.add(
         Padding(
           padding: EdgeInsets.only(left:6, right:6),
           child: ProfileSuggestion(
-            imgLink: AppUtils.getImageLink(data["avatar"]),
-            firstname: data["firstName"],
-            lastname: data["lastName"],
-            mail: data["email"],
+            id: data["id"],
+            displayName: data["displayName"],
+            imgLink: AppUtils.getAvatarLink(data["avatar"])
           ),
         ),
       );
