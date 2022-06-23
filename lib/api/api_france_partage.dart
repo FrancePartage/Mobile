@@ -42,11 +42,31 @@ class ApiFrancePartage {
   Future<Map<String,dynamic>> getUserInfos(int id) async {
     return apiUsers.getUserInfos(id);
   }
+
+  Future<Map<String,dynamic>> getUserResources(int id) async {
+    return apiUsers.getUserResources(id);
+  }
+
+  Future<Map<String,dynamic>> getUserRelations(int id) async {
+    return apiUsers.getUserRelations(id);
+  }
   //End of users methods
 
   //Relations Methods
   Future<Map<String,dynamic>> getUserSuggestions() async {
     return apiRelations.getUserSuggestions();
+  }
+
+  Future<Map<String,dynamic>> getRequests() async {
+    return apiRelations.getRequests();
+  }
+
+  Future<Map<String,dynamic>> acceptRequest(requestId) async {
+    return apiRelations.acceptRequest(requestId);
+  }
+
+  Future<Map<String,dynamic>> denyRequest(requestId) async {
+    return apiRelations.denyRequest(requestId);
   }
   //End of relations methods
 
@@ -54,6 +74,10 @@ class ApiFrancePartage {
   //Ressources Methods
   Future<Map<String,dynamic>> getResources(int page) async {
     return apiResources.getResources(page);
+  }
+
+  Future<Map<String,dynamic>> getPopularTags() async {
+    return apiResources.getPopularTags();
   }
   //End of resources methods
 }

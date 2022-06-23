@@ -5,7 +5,7 @@ import 'package:france_partage/models/app_global.dart';
 import 'package:france_partage/models/app_user_infos.dart';
 
 class AppUtils {
-  static const String IP = "10.176.130.85:3333";
+  static const String IP = "192.168.0.16:3333";
 
   // To get the good link to display an avatar
   static String getAvatarLink(String link) {
@@ -55,5 +55,20 @@ class AppUtils {
     }
     //Seconds
     return res + difference.inSeconds.toString() + " seconde" + (difference.inSeconds > 1 ? "s" : "");
+  }
+
+  static String getRequestTypeName(String type) {
+    switch(type) {
+      case "FRIEND":
+        return "Ami";
+      case "SPOUSE":
+        return "Conjoint";
+      case "WORKMATE":
+        return "Collègue";
+      case "FAMILY":
+        return "Famille";
+      default:
+        return type;
+    }
   }
 }

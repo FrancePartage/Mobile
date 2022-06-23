@@ -36,4 +36,31 @@ class ApiResources {
       "body": response.body
     };
   }
+
+  Future<Map<String,dynamic>> getPopularTags() async {
+    String completeUrl = Url + "/resources/tags";
+
+    //const storage = FlutterSecureStorage();
+    //String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      //'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    if (response.statusCode == 200) {
+      return {
+        "code": 200,
+        "body": jsonDecode(jsonEncode(response.body))
+      };
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": response.body
+    };
+  }
 }

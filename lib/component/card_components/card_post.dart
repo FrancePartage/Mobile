@@ -45,7 +45,7 @@ class _CardPostState extends State<CardPost> {
                     children: [
                       ProfilePicture(
                         link: widget.authorAvatar,
-                        id: widget.id,
+                        id: widget.authorId,
                         size: 20,
                       ),
                       SizedBox(
@@ -69,7 +69,7 @@ class _CardPostState extends State<CardPost> {
                       InkWell(
                         child: getFavoriteIcon(),
                         onTap: () {
-                          print("Eh oh c'est pas encore fait ça");
+                          print("Eh non c'est pas encore fait ça");
                           setState(() {
                             widget.favorite = !widget.favorite;
                           });

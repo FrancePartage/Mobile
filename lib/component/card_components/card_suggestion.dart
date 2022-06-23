@@ -24,16 +24,20 @@ class CardSuggestion extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 6, left: 6),
-                        child: AppText(
-                          "Suggestions",
-                          size: 16,
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 6, left: 6),
+                          child: AppText(
+                            "Suggestions",
+                            size: 16,
+                          ),
                         ),
                       ),
-                      SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: getWidgets()
+                      Center(
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: getWidgets()
+                        ),
                       )
                     ],
                   ),

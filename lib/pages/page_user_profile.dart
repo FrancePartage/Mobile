@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_france_partage.dart';
+import 'package:france_partage/component/card_components/card_post.dart';
 import 'package:france_partage/component/component_app_appbar.dart';
 import 'package:france_partage/component/component_safe_padding.dart';
 import 'package:france_partage/models/app_user_infos.dart';
 
 import '../component/card_components/card_profile_summary.dart';
+import '../component/card_components/card_relation.dart';
 import '../component/component_app_drawer.dart';
 import '../models/app_global.dart';
 import '../resources/app_utils.dart';
@@ -32,7 +34,9 @@ class _PageUserProfileState extends State<PageUserProfile> {
   void initState() {
     AppUtils.getUserInfos().then((value) =>
       getProfileInfos().then((value) =>
-        setState(() {})
+        getResources().then((value) =>
+          setState(() {})
+        )
       )
     );
   }
@@ -46,9 +50,7 @@ class _PageUserProfileState extends State<PageUserProfile> {
         child: Column(
           children: [
             getProfileCard(),
-            Column(
-              children: getContent(),
-            ),
+            getContent(),
             SafePadding()
           ],
         ),
@@ -63,7 +65,6 @@ class _PageUserProfileState extends State<PageUserProfile> {
     var dataInfos = jsonDecode(mapInfos["body"]);
 
     infos = dataInfos;
-    //await getRelations();
     setState(() {});
   }
 
@@ -77,32 +78,69 @@ class _PageUserProfileState extends State<PageUserProfile> {
           id: infos["id"],
           username: infos["displayName"],
           avatar: AppUtils.getAvatarLink(infos["avatar"]),
-          nbRessources: 0,//infos["resourcesCount"],
-          nbRelations: 0, //infos["relationsCount"],
+          nbRessources: infos["resourcesCount"],
+          nbRelations: infos["relationsCount"],
           callback: changeTab,
           selectedTab: widget.selectedTab!
       );
     }
   }
 
-  List<Widget> getContent() {
-    if(widget.selectedTab == "resources") {
-      return resourcesList;
-    }
-    if(widget.selectedTab == "relations") {
-      return relationsList;
-    }
-    return [];
+  Widget getContent() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.waiting) {
+          return const Text("LOADING");
+        } else {
+          if(projectSnap.hasData) {
+            return projectSnap.data as Widget;
+          } else {
+            return const Text("ERROR");
+          }
+        }
+      },
+      future: (widget.selectedTab == "resources") ? getResources() : getRelations(),
+    );
   }
 
-  Future<void> getRessources() async {
+  Future<Widget> getResources() async {
+    ApiFrancePartage api = ApiFrancePartage();
     List<Widget> res = [];
 
-    resourcesList =  res;
+    res.add(
+        SizedBox(height: 10,)
+    );
+
+    Map<String,dynamic> mapResources = await api.getUserResources(infos["id"]);
+    dynamic jsonData = jsonDecode(mapResources["body"])["data"];
+
+    for(var data in jsonData) {
+      List<String> stringTags = [];
+      for(var tag in data["tags"]) {
+        stringTags.add(tag);
+      }
+
+      res.add(
+        CardPost(
+            id: data["id"],
+            title: data["title"],
+            createdAt: DateTime.parse(data["createdAt"]),
+            cover: AppUtils.getCoverLink(data["cover"]),
+            tags: stringTags, //data["tags"].map((e) => e.toString()).toList()
+            favorite: false,
+            authorId: data["author"]["id"],
+            authorDisplayName: data["author"]["displayName"],
+            authorAvatar: AppUtils.getAvatarLink(data["author"]["avatar"])
+        ),
+      );
+    }
+
+    return Column(
+      children: res,
+    );
   }
 
-  /*
-  Future<void> getRelations() async {
+  Future<Widget> getRelations() async {
     ApiFrancePartage api = ApiFrancePartage();
     List<Widget> res = [];
 
@@ -110,43 +148,30 @@ class _PageUserProfileState extends State<PageUserProfile> {
       SizedBox(height: 10,)
     );
 
-    Map<String,dynamic> mapRelations = await api.getUserRelations(widget.id);
+    Map<String,dynamic> mapRelations = await api.getUserRelations(infos["id"]);
     dynamic jsonData = jsonDecode(mapRelations["body"])["data"];
-
     for(var data in jsonData) {
+      var user = data["participants"][0];
+      for (var participant in data["participants"]) {
+        if (participant["id"] != data["requestToId"]) {
+          user = participant;
+        }
+      }
+
       res.add(
         CardRelation(
-          avatar: AppUtils.getImageLink(data["avatar"]),
-          firstname: data["firstName"],
-          lastname: data["lastName"],
-          mail: data["email"],
-          relationType: data["label"]
+          type: data["type"],
+          id: user["id"],
+          avatar: user["avatar"],
+          displayName: user["displayName"],
         )
       );
     }
 
-    /*
-    res.add(CardRelation(
-      avatar: "https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png",
-      firstname: "Theo",
-      lastname: "Cousinard",
-      mail: "theo.cousinard@viacesi.fr",
-      relationType: "Conjoint",
-    ));
-
-    res.add(CardRelation(
-      avatar: "https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png",
-      firstname: "Theo",
-      lastname: "Cousinard",
-      mail: "theo.cousinard@viacesi.fr",
-      relationType: "Ami",
-    ));
-     */
-
-    relationsList = res;
+    return Column(
+      children: res,
+    );
   }
-
-   */
 
   void changeTab(String tab) {
     if(widget.selectedTab == tab) {

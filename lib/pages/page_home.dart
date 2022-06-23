@@ -92,9 +92,7 @@ class _PageHomeState extends State<PageHome> {
       for(var data in jsonData) {
         List<String> stringTags = [];
         for(var tag in data["tags"]) {
-          if(tag.runtimeType == "String") {
-            stringTags.add(tag);
-          }
+          stringTags.add(tag);
         }
 
         allPostsList.add(
@@ -112,7 +110,6 @@ class _PageHomeState extends State<PageHome> {
         );
       }
       canLoadMore = jsonDecode(mapContent["body"])["pagination"]["hasNextPage"];
-      print(canLoadMore);
       setState(() {
         loadedPages = nbPages;
       });
@@ -155,60 +152,6 @@ class _PageHomeState extends State<PageHome> {
     }
     return Container();
   }
-
-
-
-  /*
-  Future<void> getHomePageContent(int nbPages) async {
-    if(loadedPages < nbPages) {
-      ApiFrancePartage api = ApiFrancePartage();
-
-      List<Widget> postsList = [];
-      Map<String, dynamic> mapContent = await api.getHomePageContent(nbPages);
-
-      var jsonData = jsonDecode(mapContent["body"])["data"];
-
-      for(var data in jsonData["docs"]) {
-        allPostsList.add(
-          CardPost(
-            avatar: AppUtils.getImageLink(data["author"]["avatar"]),
-            firstname: data["author"]["firstName"],
-            lastname: data["author"]["lastName"],
-            mail: data["author"]["email"],
-            content: data["content"],
-            nbComments: 4,
-            like: false
-          )
-        );
-      }
-      loadedPages = nbPages;
-    }
-  }
-
-  Future<Widget> getContent() async {
-    await getHomePageContent(nbPages);
-    return Column(
-      children: allPostsList,
-    );
-  }
-
-  Widget loadContent() {
-    return FutureBuilder(
-      builder: (context, projectSnap) {
-        if (projectSnap.connectionState == ConnectionState.waiting) {
-          return const Text("LOADING");
-        } else {
-          if(projectSnap.hasData) {
-            return projectSnap.data as Widget;
-          } else {
-            return const Text("ERROR");
-          }
-        }
-      },
-      future: getContent(),
-    );
-  }
-  */
 }
 
 

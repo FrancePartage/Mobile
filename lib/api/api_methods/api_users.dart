@@ -30,4 +30,46 @@ class ApiUsers {
       "body": responseBody
     };
   }
+
+  //Get User relations by id
+  Future<Map<String,dynamic>> getUserRelations(int id) async {
+    String completeUrl = Url + "/users/" + id.toString() + "/relations";
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
+
+  //Get User resources by id
+  Future<Map<String,dynamic>> getUserResources(int id) async {
+    String completeUrl = Url + "/users/" + id.toString() + "/resources";
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
 }
