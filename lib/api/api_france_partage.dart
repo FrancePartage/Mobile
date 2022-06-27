@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_methods/api_resources.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -68,6 +69,22 @@ class ApiFrancePartage {
   Future<Map<String,dynamic>> denyRequest(requestId) async {
     return apiRelations.denyRequest(requestId);
   }
+
+  Future<Map<String,dynamic>> getRelationWithTheUser(userId) async {
+    return apiRelations.getRelationWithTheUser(userId);
+  }
+
+  Future<void> sendRelation(userId, type) async {
+    return apiRelations.sendRelation(userId, type);
+  }
+
+  Future<void> cancelRelation(userId) async {
+    return apiRelations.cancelRelation(userId);
+  }
+
+  Future<void> removeRelation(userId) async {
+    return apiRelations.removeRelation(userId);
+  }
   //End of relations methods
 
 
@@ -79,6 +96,11 @@ class ApiFrancePartage {
   Future<Map<String,dynamic>> getPopularTags() async {
     return apiResources.getPopularTags();
   }
+
+  Future<void> changeLike(ressourceId, favorite) async {
+    return apiResources.changeLike(ressourceId, favorite);
+  }
+  // changeLike
   //End of resources methods
 }
 

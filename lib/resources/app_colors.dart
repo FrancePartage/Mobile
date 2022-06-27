@@ -7,7 +7,14 @@ class AppColors {
   static const Color DARK_600 = Color(0xffB7B9CC);
   static const Color DARK_500 = Color(0xffEBF2FF);
   static const Color DARK_DRAWER =  Color.fromRGBO(29, 47, 56, 100);
+
   static const Color WHITE = Color(0xffFFFFFF);
   static const Color BLUE = Color(0xff007BFF);
   static const Color CYAN = Color(0xff00C9E4);
+
+  static const Color ORANGE_600 = Color(0xffca8a04);
+  static const Color ORANGE_200 = Color(0xfffef08a);
+
+  static const Color RED_600 = Color(0xffb02a37);
+  static const Color RED_200 = Color(0xfff1aeb5);
 }

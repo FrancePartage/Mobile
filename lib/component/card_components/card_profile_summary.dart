@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:france_partage/component/component_relation_button.dart';
+import '../../api/api_france_partage.dart';
 import '../../component/component_profile_picture.dart';
 import '../../component/text_components/app_text.dart';
+import '../../models/app_global.dart';
 import '../../resources/app_colors.dart';
 
 class CardProfileSummary extends StatefulWidget {
@@ -11,7 +16,8 @@ class CardProfileSummary extends StatefulWidget {
   final int nbRelations;
   final String selectedTab;
   final Function(String) callback;
-  const CardProfileSummary({Key? key,required this.id, required this.username, required this.nbRessources, required this.nbRelations, required this.callback, required this.selectedTab, required this.avatar}) : super(key: key);
+  final Function callbackReload;
+  const CardProfileSummary({Key? key,required this.id, required this.username, required this.nbRessources, required this.nbRelations, required this.callback, required this.selectedTab, required this.avatar, required this.callbackReload}) : super(key: key);
 
   @override
   _CardProfileSummaryState createState() => _CardProfileSummaryState();
@@ -42,6 +48,10 @@ class _CardProfileSummaryState extends State<CardProfileSummary> {
                   Padding(
                     padding: EdgeInsets.only(top: 20),
                     child: AppText(widget.username, size: 28, textAlign: TextAlign.center),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: getRelationWithUserBuilder(),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 40),
@@ -102,6 +112,46 @@ class _CardProfileSummaryState extends State<CardProfileSummary> {
         ),
       ),
     );
+  }
+
+  Widget getRelationWithUserBuilder() {
+    return FutureBuilder(
+      builder: (context, projectSnap) {
+        if (projectSnap.connectionState == ConnectionState.waiting) {
+          return const Text("LOADING");
+        } else {
+          if(projectSnap.hasData) {
+            return projectSnap.data as Widget;
+          } else {
+            return const Text("ERROR");
+          }
+        }
+      },
+      future: getRelationWithUser(),
+    );
+  }
+
+  Future<Widget> getRelationWithUser() async {
+    if(AppGlobal.userInfos!.id == widget.id) {
+      return Container();
+    }
+
+    ApiFrancePartage api = ApiFrancePartage();
+    Map<String,dynamic> userRelation = await api.getRelationWithTheUser(widget.id);
+    dynamic jsonData = jsonDecode(userRelation["body"])["data"];
+
+    //Not a friend
+    if(jsonData == null) {
+      return RelationButton(id: widget.id, type: "ADD", callbackReload: widget.callbackReload,);
+    }
+
+    //Request pending
+    if(jsonData["isAccepted"] != true) {
+      return RelationButton(id: widget.id, type: "PENDING", callbackReload: widget.callbackReload,);
+    }
+
+    //Friend
+    return RelationButton(id: widget.id, type: "REMOVE", callbackReload: widget.callbackReload,);
   }
 }
 

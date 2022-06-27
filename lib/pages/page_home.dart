@@ -101,8 +101,8 @@ class _PageHomeState extends State<PageHome> {
             title: data["title"],
             createdAt: DateTime.parse(data["createdAt"]),
             cover: AppUtils.getCoverLink(data["cover"]),
-            tags: stringTags, //data["tags"].map((e) => e.toString()).toList()
-            favorite: false,
+            tags: stringTags,
+            favorite: data["liked"],
             authorId: data["author"]["id"],
             authorDisplayName: data["author"]["displayName"],
             authorAvatar: AppUtils.getAvatarLink(data["author"]["avatar"])
@@ -117,7 +117,6 @@ class _PageHomeState extends State<PageHome> {
   }
 
   Widget getNextPageBtn() {
-    print(canLoadMore);
     if(canLoadMore) {
       return Padding(
         padding: EdgeInsets.only(top: 14),

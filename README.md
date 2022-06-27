@@ -8,7 +8,7 @@ Application pour la plateforme FrancePartage
 
 - [ ] Rechercher des ressources
 - [ ] Rechercher des relations
-- [ ] Tags populaires
+- [x] Tags populaires
 
 ### Authentification
 
@@ -22,30 +22,28 @@ Application pour la plateforme FrancePartage
 - [ ] Changer son avatar
 - [ ] Changer son mot de passe
 - [ ] Changer ses informations
-- [ ] Consulter un utilisateur
-- [ ] Consulter les ressources d'un utilisateur
-- [ ] Consulter les relations d'un utilisateur
+- [x] Consulter un utilisateur
+- [x] Consulter les ressources d'un utilisateur
+- [x] Consulter les relations d'un utilisateur
 
 ### Ressources
 
 - [ ] Ajouter une ressource
 - [ ] Systeme d'upload d'image dans Quill
-- [ ] Afficher les ressources sur la page principale (infinite scroll)
+- [x] Afficher les ressources sur la page principale (infinite scroll)
 - [ ] Consulter une ressource
-- [ ] Like/Dislike une ressource
+- [x] Like/Dislike une ressource
 - [ ] Afficher les commentaires d'une ressource (pagination)
 - [ ] Ajouter une commentaire
-- [ ] Afficher les ressources d'un utilisateur
 - [ ] Consulter les ressources par tags
 - [ ] Adapter le contenu aux balises (H1, H2, etc.)
 
 ### Relations
 
-- [ ] Envoyer une demande d'ajout de relation
-- [ ] Afficher les requetes reçues
-- [ ] Accepter/refuser une requete
-- [ ] Afficher les relations d'un utilisateur
-- [ ] Afficher les suggestions sur le feed
+- [x] Envoyer une demande d'ajout de relation
+- [x] Afficher les requetes reçues
+- [x] Accepter/refuser une requete
+- [x] Afficher les suggestions sur le feed
 
 ### Administration
 

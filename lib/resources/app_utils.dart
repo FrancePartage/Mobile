@@ -5,6 +5,7 @@ import 'package:france_partage/models/app_global.dart';
 import 'package:france_partage/models/app_user_infos.dart';
 
 class AppUtils {
+                          //10.176.130.243
   static const String IP = "192.168.0.16:3333";
 
   // To get the good link to display an avatar
@@ -67,8 +68,19 @@ class AppUtils {
         return "Collègue";
       case "FAMILY":
         return "Famille";
-      default:
-        return type;
     }
+
+    switch(type) {
+      case "Ami":
+        return "FRIEND";
+      case "Conjoint":
+        return "SPOUSE";
+      case "Collègue":
+        return "WORKMATE";
+      case "Famille":
+        return "FAMILY";
+    }
+
+    return type;
   }
 }

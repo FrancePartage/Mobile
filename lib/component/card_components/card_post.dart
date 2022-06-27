@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/resources/app_colors.dart';
 import 'package:france_partage/resources/app_utils.dart';
 import '../../component/component_profile_picture.dart';
@@ -69,7 +70,7 @@ class _CardPostState extends State<CardPost> {
                       InkWell(
                         child: getFavoriteIcon(),
                         onTap: () {
-                          print("Eh non c'est pas encore fait ça");
+                          changeLike();
                           setState(() {
                             widget.favorite = !widget.favorite;
                           });
@@ -159,5 +160,10 @@ class _CardPostState extends State<CardPost> {
     return Row(
       children: tagsList,
     );
+  }
+
+  changeLike() async {
+    ApiFrancePartage api = ApiFrancePartage();
+    await api.changeLike(widget.id, widget.favorite);
   }
 }

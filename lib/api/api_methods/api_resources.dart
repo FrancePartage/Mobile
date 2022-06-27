@@ -63,4 +63,24 @@ class ApiResources {
       "body": response.body
     };
   }
+
+  //Like or Dislike a ressource
+  Future<void> changeLike(ressourceId, favorite) async {
+    String completeUrl = Url + "/resources/first/" + ressourceId.toString() + "/like";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    if(favorite) {
+      await http.delete(Uri.parse(completeUrl), headers: headers);
+    } else {
+      await http.post(Uri.parse(completeUrl), headers: headers);
+    }
+  }
 }

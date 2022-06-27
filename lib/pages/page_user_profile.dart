@@ -27,8 +27,6 @@ class PageUserProfile extends StatefulWidget {
 class _PageUserProfileState extends State<PageUserProfile> {
 
   dynamic infos = null;
-  List<Widget> resourcesList = [];
-  List<Widget> relationsList = [];
 
   @override
   void initState() {
@@ -58,6 +56,10 @@ class _PageUserProfileState extends State<PageUserProfile> {
     );
   }
 
+  void reload() {
+    setState(() {});
+  }
+
   Future<void> getProfileInfos() async{
     ApiFrancePartage api = ApiFrancePartage();
 
@@ -75,13 +77,14 @@ class _PageUserProfileState extends State<PageUserProfile> {
       );
     } else {
       return CardProfileSummary(
-          id: infos["id"],
-          username: infos["displayName"],
-          avatar: AppUtils.getAvatarLink(infos["avatar"]),
-          nbRessources: infos["resourcesCount"],
-          nbRelations: infos["relationsCount"],
-          callback: changeTab,
-          selectedTab: widget.selectedTab!
+        id: infos["id"],
+        username: infos["displayName"],
+        avatar: AppUtils.getAvatarLink(infos["avatar"]),
+        nbRessources: infos["resourcesCount"],
+        nbRelations: infos["relationsCount"],
+        callback: changeTab,
+        selectedTab: widget.selectedTab!,
+        callbackReload: reload,
       );
     }
   }

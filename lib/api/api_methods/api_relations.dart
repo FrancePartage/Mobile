@@ -125,4 +125,97 @@ class ApiRelations {
       "body": responseBody
     };
   }
+
+  //Get relation with a user
+  Future<Map<String,dynamic>> getRelationWithTheUser(userId) async {
+    String completeUrl = Url + "/relations/user/" + userId.toString();
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
+
+  //Send a relation request
+  Future<void> sendRelation(userId, type) async {
+    String completeUrl = Url + "/relations/request";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "recipientId": userId,
+      "type": type
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.post(Uri.parse(completeUrl), headers: headers, body: jsonString);
+  }
+
+  //Cancel a relation request
+  Future<void> cancelRelation(userId) async {
+    String completeUrl = Url + "/relations/request/cancel";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "requestId": userId
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.delete(Uri.parse(completeUrl), headers: headers, body: jsonString);
+  }
+
+  //Remove a relation
+  Future<void> removeRelation(userId) async {
+    String completeUrl = Url + "/relations";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "requestId": userId
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.delete(Uri.parse(completeUrl), headers: headers, body: jsonString);
+  }
 }
