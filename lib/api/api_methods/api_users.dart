@@ -56,11 +56,83 @@ class ApiUsers {
   Future<Map<String,dynamic>> getUserResources(int id) async {
     String completeUrl = Url + "/users/" + id.toString() + "/resources";
 
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
     final headers = {
       HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
     };
 
     final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
+
+  //Update user infos
+  Future<Map<String,dynamic>> updateUserInfos(username, firstname, lastname) async {
+    String completeUrl = Url + "/users/informations";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "username": username,
+      "firstname": firstname,
+      "lastname": lastname
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.patch(Uri.parse(completeUrl), headers: headers, body: jsonString);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
+
+  //Update user password
+  Future<Map<String,dynamic>> updateUserPassword(oldPassword, password) async {
+    String completeUrl = Url + "/users/password";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "oldPassword": oldPassword,
+      "newPassword": password
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.patch(Uri.parse(completeUrl), headers: headers, body: jsonString);
 
     var responseBody = response.body;
     if(response.statusCode == 200) {

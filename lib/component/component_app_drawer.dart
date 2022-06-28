@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/models/app_global.dart';
+import 'package:france_partage/pages/page_settings.dart';
 import 'package:france_partage/resources/app_colors.dart';
 import '../pages/page_log_in.dart';
 import '../pages/page_notification.dart';
@@ -95,13 +96,11 @@ class AppDrawer extends StatelessWidget {
   }
 
   void goToParameter(context) {
-    /*
     Navigator.push(context,
       MaterialPageRoute(builder: (BuildContext context){
-        return const PageParameter();
+        return const PageSettings();
       })
     );
-    */
   }
 
   void returnToLogIn(context) async {

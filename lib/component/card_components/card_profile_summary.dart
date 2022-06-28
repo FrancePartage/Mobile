@@ -142,16 +142,16 @@ class _CardProfileSummaryState extends State<CardProfileSummary> {
 
     //Not a friend
     if(jsonData == null) {
-      return RelationButton(id: widget.id, type: "ADD", callbackReload: widget.callbackReload,);
+      return RelationButton(id: widget.id, type: "ADD", callbackReload: widget.callbackReload,requestId: 0,);
     }
 
     //Request pending
     if(jsonData["isAccepted"] != true) {
-      return RelationButton(id: widget.id, type: "PENDING", callbackReload: widget.callbackReload,);
+      return RelationButton(id: widget.id, type: "PENDING", callbackReload: widget.callbackReload, requestId: jsonData["id"],);
     }
 
     //Friend
-    return RelationButton(id: widget.id, type: "REMOVE", callbackReload: widget.callbackReload,);
+    return RelationButton(id: widget.id, type: "REMOVE", callbackReload: widget.callbackReload, requestId: jsonData["id"],);
   }
 }
 

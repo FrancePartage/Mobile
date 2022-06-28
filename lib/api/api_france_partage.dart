@@ -36,6 +36,10 @@ class ApiFrancePartage {
   Future<AppUserInfos?> getActualUserInfos() async {
     return apiAuth.getActualUserInfos();
   }
+
+  Future<Map<String,dynamic>> getMyInfos() async {
+    return apiAuth.getMyInfos();
+  }
   //End of auth methods
 
 
@@ -50,6 +54,14 @@ class ApiFrancePartage {
 
   Future<Map<String,dynamic>> getUserRelations(int id) async {
     return apiUsers.getUserRelations(id);
+  }
+
+  Future<Map<String,dynamic>> updateUserInfos(username, firstname, lastname) async {
+    return apiUsers.updateUserInfos(username, firstname, lastname);
+  }
+
+  Future<Map<String,dynamic>> updateUserPassword(oldPassword, password) async {
+    return apiUsers.updateUserPassword(oldPassword, password);
   }
   //End of users methods
 
@@ -100,168 +112,9 @@ class ApiFrancePartage {
   Future<void> changeLike(ressourceId, favorite) async {
     return apiResources.changeLike(ressourceId, favorite);
   }
-  // changeLike
+
+  Future<Map<String,dynamic>> getRessource(id) async {
+    return apiResources.getRessource(id);
+  }
   //End of resources methods
 }
-
-
-
-
-
-
-
-  /*
-  Future<Map<String,dynamic>> getHomePageContent(int page) async {
-    String completeUrl = Url + "/resources?page=" + page.toString();
-
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: "token");
-
-    final headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.acceptHeader: 'application/json',
-      'x-access-token': token!
-    };
-
-    final response = await http.get(Uri.parse(completeUrl), headers: headers);
-
-    if(response.statusCode == 200) {
-      return {
-        "code": 200,
-        "body": jsonDecode(jsonEncode(response.body))
-      };
-    }
-
-    return {
-      "code": response.statusCode,
-      "body": response.body
-    };
-  }
-  */
-
-  //getUserRessources
-
-  /*
-  Future<Map<String,dynamic>> getUserRelations(String email) async {
-    String completeUrl = Url + "/relations/" + email;
-
-    final headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-    };
-
-    final response = await http.get(Uri.parse(completeUrl), headers: headers);
-
-    if(response.statusCode == 200) {
-      return {
-        "code": 200,
-        "body": jsonDecode(jsonEncode(response.body))
-      };
-    }
-
-    return {
-      "code": response.statusCode,
-      "body": response.body
-    };
-  }
-  */
-
-  /*
-  // Notification Page
-  Future<Map<String,dynamic>> getFriendRequests(String email) async {
-    String completeUrl = Url + "/relations/requests";
-
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: "token");
-
-    final headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.acceptHeader: 'application/json',
-      'x-access-token': token!
-    };
-
-    final response = await http.get(Uri.parse(completeUrl), headers: headers);
-
-    if(response.statusCode == 200) {
-      return {
-        "code": 200,
-        "body": jsonDecode(jsonEncode(response.body))
-      };
-    }
-
-    return {
-      "code": response.statusCode,
-      "body": response.body
-    };
-  }
-  */
-
-  /*
-  //accept request  acceptFriendRequest
-  Future<Map<String,dynamic>> acceptFriendRequest(String id) async {
-    String completeUrl = Url + "/relations/accept";
-
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: "token");
-
-    final headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.acceptHeader: 'application/json',
-      'x-access-token': token!
-    };
-
-    var body = {
-      "relationId":id
-    };
-
-    final jsonString = json.encode(body);
-
-    final response = await http.post(Uri.parse(completeUrl), headers: headers, body: jsonString);
-
-    if(response.statusCode == 200) {
-      return {
-        "code": 200,
-        "body": jsonDecode(jsonEncode(response.body))
-      };
-    }
-
-    return {
-      "code": response.statusCode,
-      "body": response.body
-    };
-  }
-  */
-
-  /*
-  Future<Map<String,dynamic>> denyFriendRequest(String id) async {
-    String completeUrl = Url + "/relations/deny";
-
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: "token");
-
-    final headers = {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.acceptHeader: 'application/json',
-      'x-access-token': token!
-    };
-
-    var body = {
-      "relationId":id
-    };
-
-    final jsonString = json.encode(body);
-
-    final response = await http.post(Uri.parse(completeUrl), headers: headers, body: jsonString);
-
-    if(response.statusCode == 200) {
-      return {
-        "code": 200,
-        "body": jsonDecode(jsonEncode(response.body))
-      };
-    }
-
-    return {
-      "code": response.statusCode,
-      "body": response.body
-    };
-  }
-  */

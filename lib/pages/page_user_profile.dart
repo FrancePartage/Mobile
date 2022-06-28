@@ -129,8 +129,8 @@ class _PageUserProfileState extends State<PageUserProfile> {
             title: data["title"],
             createdAt: DateTime.parse(data["createdAt"]),
             cover: AppUtils.getCoverLink(data["cover"]),
-            tags: stringTags, //data["tags"].map((e) => e.toString()).toList()
-            favorite: false,
+            tags: stringTags,
+            favorite: data["liked"],
             authorId: data["author"]["id"],
             authorDisplayName: data["author"]["displayName"],
             authorAvatar: AppUtils.getAvatarLink(data["author"]["avatar"])

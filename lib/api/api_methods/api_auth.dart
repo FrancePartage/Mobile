@@ -77,7 +77,7 @@ class ApiAuth {
     await http.post(Uri.parse(completeUrl), headers: headers);
   }
 
-  //Get infos of logged user
+  //Set infos of logged user in AppGlobal
   Future<AppUserInfos?> getActualUserInfos() async {
     String completeUrl = Url + "/auth/me";
 
@@ -98,5 +98,31 @@ class ApiAuth {
     }
 
     return null;
+  }
+
+  //Return infos of logged user
+  Future<Map<String,dynamic>> getMyInfos() async {
+    String completeUrl = Url + "/auth/me";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
   }
 }

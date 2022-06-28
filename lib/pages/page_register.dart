@@ -200,7 +200,6 @@ class _PageRegisterState extends State<PageRegister> {
         })
       );
     } else {
-      print(mapRegister["body"]);
       errorMsg = "";
       setState(() {
         if(jsonDecode(mapRegister["body"])["message"] is List<dynamic>) {

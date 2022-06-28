@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/resources/app_colors.dart';
 import 'package:france_partage/resources/app_utils.dart';
 import '../../component/component_profile_picture.dart';
+import '../../pages/page_resource.dart';
 import '../text_components/app_tag.dart';
 import '../text_components/app_text.dart';
 
@@ -129,7 +129,11 @@ class _CardPostState extends State<CardPost> {
   }
 
   void goToPostPage() {
-    print("Going to post page");
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return PageResource(id: widget.id,);
+        })
+    );
   }
 
   Icon getFavoriteIcon() {

@@ -10,10 +10,11 @@ import '../resources/app_colors.dart';
 
 class RelationButton extends StatefulWidget {
   final int id;
+  final int requestId;
   final String type;
   final Function callbackReload;
 
-  const RelationButton({Key? key, required this.id, required this.type, required this.callbackReload}) : super(key: key);
+  const RelationButton({Key? key, required this.id, required this.type, required this.callbackReload, required this.requestId}) : super(key: key);
 
   @override
   State<RelationButton> createState() => _RelationButtonState();
@@ -148,13 +149,13 @@ class _RelationButtonState extends State<RelationButton> {
 
   cancelRequest() async {
     ApiFrancePartage api = ApiFrancePartage();
-    await api.cancelRelation(widget.id);
+    await api.cancelRelation(widget.requestId);
     widget.callbackReload();
   }
 
   removeRelation() async {
     ApiFrancePartage api = ApiFrancePartage();
-    await api.removeRelation(widget.id);
+    await api.removeRelation(widget.requestId);
     widget.callbackReload();
   }
 }

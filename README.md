@@ -20,8 +20,8 @@ Application pour la plateforme FrancePartage
  ### Utilisateurs
 
 - [ ] Changer son avatar
-- [ ] Changer son mot de passe
-- [ ] Changer ses informations
+- [x] Changer son mot de passe
+- [x] Changer ses informations
 - [x] Consulter un utilisateur
 - [x] Consulter les ressources d'un utilisateur
 - [x] Consulter les relations d'un utilisateur
