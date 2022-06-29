@@ -8,8 +8,8 @@ class CardRelation extends StatefulWidget {
   final int id;
   final String avatar;
   final String displayName;
-  final String type;
-  const CardRelation({Key? key, required this.id, required this.avatar, required this.displayName, required this.type}) : super(key: key);
+  final String? type;
+  const CardRelation({Key? key, required this.id, required this.avatar, required this.displayName, this.type = null}) : super(key: key);
 
   @override
   State<CardRelation> createState() => _CardRelationState();
@@ -53,7 +53,7 @@ class _CardRelationState extends State<CardRelation> {
                     Padding(
                       padding: EdgeInsets.only(right: 8),
                       child: AppText(
-                        AppUtils.getRequestTypeName(widget.type),
+                        (widget.type != null ? AppUtils.getRequestTypeName(widget.type!) : ""),
                         size: 18,
                       ),
                     )

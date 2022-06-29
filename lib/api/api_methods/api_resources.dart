@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../../models/app_user_infos.dart';
 
@@ -158,6 +160,105 @@ class ApiResources {
     final response = await http.post(Uri.parse(completeUrl), headers: headers, body: jsonString);
 
     if (response.statusCode == 200) {
+      return {
+        "code": 200,
+        "body": jsonDecode(jsonEncode(response.body))
+      };
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": response.body
+    };
+  }
+
+  // Send a post
+  Future<Map<String,dynamic>> postRessource(title, tags, coverXFile, content) async {
+    String completeUrl = Url + "/resources";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    print(coverXFile.path);
+    File coverFile = File(coverXFile.path);
+
+    var postUri = Uri.parse(completeUrl);
+    var request = new http.MultipartRequest("POST", postUri);
+    request.headers.addAll(headers);
+
+    Map<String, String> tagsArray = {
+      for (var i = 0; i < tags.length; i++) 'fields[0][tags][$i]': tags[i]
+    };
+    request.fields.addAll({
+      ...tagsArray,
+      'fields[0][title]': title,
+      'fields[0][content]': content,
+    });
+    print(request.fields);
+    request.files.add(new http.MultipartFile.fromBytes('coverFile', await File.fromUri(Uri.parse(coverFile.path)).readAsBytes(), contentType: new MediaType('image', 'jpeg')));
+
+    final response = await request.send();
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(response);
+    }
+
+    return {
+      "code": 200,
+      "body": jsonEncode("Testing")
+    };
+  }
+
+  // Search resources
+  Future<Map<String,dynamic>> searchResources(String search) async {
+    String completeUrl = Url + "/resources/search/" + search;
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    if(response.statusCode == 200) {
+      return {
+        "code": 200,
+        "body": jsonDecode(jsonEncode(response.body))
+      };
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": response.body
+    };
+  }
+
+  // Search resources by tag
+  Future<Map<String,dynamic>> searchResourcesByTag(String search) async {
+    String completeUrl = Url + "/resources/tags/" + search;
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    if(response.statusCode == 200) {
       return {
         "code": 200,
         "body": jsonDecode(jsonEncode(response.body))

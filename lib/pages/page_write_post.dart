@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:delta_to_html/delta_to_html.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/component/text_components/app_tag_selector.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -115,7 +119,13 @@ class _PageWritePostState extends State<PageWritePost> {
                 ),
               ),
               ),
-              QuillToolbar.basic(controller: quillController, multiRowsDisplay: false),
+              QuillToolbar.basic(
+                controller: quillController,
+                showFontSize: false,
+                showBackgroundColorButton: false,
+                showInlineCode: false,
+                multiRowsDisplay: false
+              ),
               Expanded(
                 child: Container(
                   color: AppColors.WHITE,
@@ -206,7 +216,18 @@ class _PageWritePostState extends State<PageWritePost> {
     );
   }
 
-  void sendResource() {
+  void removeTag(String tag) {
+    tagsList.remove(tag);
+    setState(() {});
+  }
+
+  String quillDeltaToHtml(String delta) {
+    DeltaToHTML converter = DeltaToHTML();
+    String result = converter.encodeJson(delta);
+    return result;
+  }
+
+  Future<void> sendResource() async {
     if(sending) {
       //return;
     }
@@ -231,11 +252,12 @@ class _PageWritePostState extends State<PageWritePost> {
     print(titleCtrl.text);
     print(tagsList);
     print(cover!.name);
-    print(quillController.document.toDelta());
-  }
+    List<dynamic> delta = quillController.document.toDelta().toJson();
+    String content = quillDeltaToHtml(jsonEncode(delta));
+    print(content);
 
-  void removeTag(String tag) {
-    tagsList.remove(tag);
-    setState(() {});
+    ApiFrancePartage api = ApiFrancePartage();
+    Map<String, dynamic> mapResult = await api.postRessource(titleCtrl.text, tagsList, cover!, content);
+    print(mapResult);
   }
 }

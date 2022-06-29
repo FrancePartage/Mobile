@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:france_partage/models/app_global.dart';
+import 'package:france_partage/pages/page_search.dart';
 import 'package:france_partage/resources/app_utils.dart';
 import '../pages/page_home.dart';
 import '../resources/app_colors.dart';
@@ -17,6 +18,8 @@ class AppAppbar extends StatefulWidget implements PreferredSizeWidget{
 }
 
 class _AppAppbarState extends State<AppAppbar> {
+  TextEditingController searchCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -43,11 +46,17 @@ class _AppAppbarState extends State<AppAppbar> {
               border: const OutlineInputBorder(),
               hintText: "Rechercher",
               hintStyle: const TextStyle(color: AppColors.DARK_600),
-              suffixIcon: const Icon(
-                Icons.zoom_in_sharp,
-                color: AppColors.DARK_600,
+              suffixIcon: InkWell(
+                onTap: () {
+                  goToSearchPage(context);
+                },
+                child: const Icon(
+                  Icons.zoom_in_sharp,
+                  color: AppColors.DARK_600,
+                ),
               )
             ),
+            controller: searchCtrl,
           )
       ),
       actions: [
@@ -72,6 +81,15 @@ class _AppAppbarState extends State<AppAppbar> {
       MaterialPageRoute(builder: (BuildContext context){
         return PageHome();
       })
+    );
+  }
+
+  void goToSearchPage(context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return PageSearch(search: searchCtrl.text);
+        })
     );
   }
 }

@@ -14,13 +14,13 @@ class CardPost extends StatefulWidget {
   final DateTime createdAt;
   final String cover;
   final List<String> tags;
-  bool favorite;
+  bool? favorite;
 
   final int authorId;
   final String authorDisplayName;
   final String authorAvatar;
 
-  CardPost({Key? key, required this.id, required this.title, required this.createdAt, required this.cover, required this.tags, required this.favorite, required this.authorId, required this.authorDisplayName, required this.authorAvatar}) : super(key: key) {}
+  CardPost({Key? key, required this.id, required this.title, required this.createdAt, required this.cover, required this.tags, this.favorite = null, required this.authorId, required this.authorDisplayName, required this.authorAvatar}) : super(key: key) {}
 
   @override
   _CardPostState createState() => _CardPostState();
@@ -67,15 +67,7 @@ class _CardPostState extends State<CardPost> {
                         ],
                       ),
                       Expanded(child: Container(),),
-                      InkWell(
-                        child: getFavoriteIcon(),
-                        onTap: () {
-                          changeLike();
-                          setState(() {
-                            widget.favorite = !widget.favorite;
-                          });
-                        },
-                      ),
+                      getFavorite(),
                       SizedBox(
                         width: 6,
                       )
@@ -136,20 +128,39 @@ class _CardPostState extends State<CardPost> {
     );
   }
 
-  Icon getFavoriteIcon() {
-    if(widget.favorite) {
-      return Icon(
-        Icons.favorite,
-        color: AppColors.BLUE,
-        size: 36,
-      );
+  Widget getFavorite() {
+    if(widget.favorite != null) {
+      if(widget.favorite!) {
+        return InkWell(
+          child: Icon(
+            Icons.favorite,
+            color: AppColors.BLUE,
+            size: 36,
+          ),
+          onTap: () {
+            changeLike();
+            setState(() {
+              widget.favorite = !widget.favorite!;
+            });
+          },
+        );
+      } else {
+        return InkWell(
+          child: Icon(
+            Icons.favorite_border,
+            color: AppColors.DARK_800,
+            size: 36,
+          ),
+          onTap: () {
+            changeLike();
+            setState(() {
+              widget.favorite = !widget.favorite!;
+            });
+          },
+        );
+      }
     } else {
-      return Icon(
-        Icons.favorite_border,
-        color: AppColors.DARK_800,
-        size: 36,
-
-      );
+      return Container();
     }
   }
 

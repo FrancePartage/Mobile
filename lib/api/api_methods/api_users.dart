@@ -144,4 +144,30 @@ class ApiUsers {
       "body": responseBody
     };
   }
+
+  // Search Users
+  Future<Map<String,dynamic>> searchUsers(String search) async {
+    String completeUrl = Url + "/users/search/" + search;
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    var responseBody = response.body;
+    if(response.statusCode == 200) {
+      var responseBody = jsonDecode(jsonEncode(response.body));
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": responseBody
+    };
+  }
 }

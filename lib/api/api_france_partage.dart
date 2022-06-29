@@ -63,6 +63,10 @@ class ApiFrancePartage {
   Future<Map<String,dynamic>> updateUserPassword(oldPassword, password) async {
     return apiUsers.updateUserPassword(oldPassword, password);
   }
+
+  Future<Map<String,dynamic>> searchUsers(String search) async {
+    return apiUsers.searchUsers(search);
+  }
   //End of users methods
 
   //Relations Methods
@@ -123,6 +127,18 @@ class ApiFrancePartage {
 
   Future<Map<String,dynamic>> addComment(id, comment) async {
     return apiResources.addComment(id, comment);
+  }
+
+  Future<Map<String,dynamic>> postRessource(title, tags, coverFile, content) async {
+    return apiResources.postRessource(title, tags, coverFile, content);
+  }
+
+  Future<Map<String,dynamic>> searchResources(String search) async {
+    return apiResources.searchResources(search);
+  }
+
+  Future<Map<String,dynamic>> searchResourcesByTag(String search) async {
+    return apiResources.searchResourcesByTag(search);
   }
   //End of resources methods
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:france_partage/component/text_components/app_text.dart';
 import 'package:france_partage/resources/app_colors.dart';
 
+import '../../pages/page_tag_search.dart';
+
 class AppTag extends StatefulWidget {
   final String tag;
   final Function? callback;
@@ -49,6 +51,10 @@ class _AppTagState extends State<AppTag> {
   }
 
   void goToTagSearch() {
-    print("Recherche de : #" + widget.tag);
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return PageTagSearch(search: widget.tag);
+        })
+    );
   }
 }
