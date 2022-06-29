@@ -116,5 +116,13 @@ class ApiFrancePartage {
   Future<Map<String,dynamic>> getRessource(id) async {
     return apiResources.getRessource(id);
   }
+
+  Future<Map<String,dynamic>> getComments(id) async {
+    return apiResources.getComments(id);
+  }
+
+  Future<Map<String,dynamic>> addComment(id, comment) async {
+    return apiResources.addComment(id, comment);
+  }
   //End of resources methods
 }

@@ -4,7 +4,8 @@ import 'package:france_partage/resources/app_colors.dart';
 
 class AppTag extends StatefulWidget {
   final String tag;
-  const AppTag({Key? key, required this.tag}) : super(key: key);
+  final Function? callback;
+  const AppTag({Key? key, required this.tag, this.callback = null}) : super(key: key);
 
   @override
   State<AppTag> createState() => _AppTagState();
@@ -34,11 +35,20 @@ class _AppTagState extends State<AppTag> {
           ),
         ),
       ),
-      onTap: goToTagSearch,
+      onTap: actionTag,
     );
   }
 
-  goToTagSearch() {
+  void actionTag() {
+    if(widget.callback != null) {
+      widget.callback!(widget.tag);
+      return;
+    }
+
+    goToTagSearch();
+  }
+
+  void goToTagSearch() {
     print("Recherche de : #" + widget.tag);
   }
 }

@@ -5,8 +5,9 @@ class AppTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController textController;
   final bool? obscureText;
+  final double? sizeRatio;
 
-  const AppTextField({Key? key, required this.labelText, required this.hintText, required this.textController, this.obscureText = false}) : super(key: key);
+  const AppTextField({Key? key, required this.labelText, required this.hintText, required this.textController, this.obscureText = false, this.sizeRatio = 0.7}) : super(key: key);
 
   @override
   _AppTextFieldState createState() => _AppTextFieldState();
@@ -15,8 +16,10 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      width: 250,
+      width: (size.width * widget.sizeRatio!),
       child: TextField(
         obscureText: widget.obscureText!,
         keyboardType: TextInputType.text,

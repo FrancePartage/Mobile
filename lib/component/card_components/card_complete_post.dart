@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../../api/api_france_partage.dart';
 import '../../resources/app_colors.dart';
@@ -13,7 +14,7 @@ class CardCompletePost extends StatefulWidget {
   final DateTime createdAt;
   final List<String> tags;
   bool favorite;
-  final String content;
+  String content;
 
   final int authorId;
   final String authorDisplayName;
@@ -29,6 +30,11 @@ class _CardCompletePostState extends State<CardCompletePost> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    // For tests, not usefull for prod version
+    widget.content = widget.content.replaceAll("localhost:3333", AppUtils.IP);
+    // End of tests
+
     return Padding(
       padding: EdgeInsets.only(top: 16),
       child: Center(
@@ -108,6 +114,7 @@ class _CardCompletePostState extends State<CardCompletePost> {
                             height: 1,
                           ),
                         ),
+                        Html(data: widget.content)
                       ],
                     )
                   ],
@@ -131,7 +138,6 @@ class _CardCompletePostState extends State<CardCompletePost> {
         Icons.favorite_border,
         color: AppColors.DARK_800,
         size: 36,
-
       );
     }
   }

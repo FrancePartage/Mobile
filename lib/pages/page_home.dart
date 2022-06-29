@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/component/text_components/app_text.dart';
+import 'package:france_partage/pages/page_write_post.dart';
 import 'package:france_partage/resources/app_colors.dart';
 import 'package:france_partage/resources/app_utils.dart';
 
@@ -62,9 +63,8 @@ class _PageHomeState extends State<PageHome> {
             ],
           ),
         ),
-        /*
         floatingActionButton: FloatingActionButton(
-            onPressed: null,
+            onPressed: goToPostWriting,
             child: Container(
               width: 60,
               height: 60,
@@ -75,7 +75,6 @@ class _PageHomeState extends State<PageHome> {
               child: const Icon(Icons.add),
             )
         ),
-        */
       );
     }
   }
@@ -150,6 +149,14 @@ class _PageHomeState extends State<PageHome> {
       );
     }
     return Container();
+  }
+
+  void goToPostWriting() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (BuildContext context){
+          return const PageWritePost();
+        })
+    );
   }
 }
 

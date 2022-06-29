@@ -108,4 +108,65 @@ class ApiResources {
       "body": response.body
     };
   }
+
+  // Get a ressource comments
+  Future<Map<String,dynamic>> getComments(id) async {
+    String completeUrl = Url + "/resources/first/" + id.toString() + "/comments";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.get(Uri.parse(completeUrl), headers: headers);
+
+    if (response.statusCode == 200) {
+      return {
+        "code": 200,
+        "body": jsonDecode(jsonEncode(response.body))
+      };
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": response.body
+    };
+  }
+
+  Future<Map<String,dynamic>> addComment(id, comment) async {
+    String completeUrl = Url + "/resources/first/" + id.toString() + "/comments";
+
+    const storage = FlutterSecureStorage();
+    String? accessToken = await storage.read(key: "accessToken");
+
+    var body = {
+      "content": comment
+    };
+
+    final jsonString = json.encode(body);
+
+    final headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.acceptHeader: 'application/json',
+      'Authorization': "Bearer " + accessToken!
+    };
+
+    final response = await http.post(Uri.parse(completeUrl), headers: headers, body: jsonString);
+
+    if (response.statusCode == 200) {
+      return {
+        "code": 200,
+        "body": jsonDecode(jsonEncode(response.body))
+      };
+    }
+
+    return {
+      "code": response.statusCode,
+      "body": response.body
+    };
+  }
 }

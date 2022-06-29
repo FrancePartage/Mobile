@@ -36,6 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   flutter_secure_storage: ^5.0.2
+  flutter_html: ^2.2.1
+  flutter_quill: ^5.0.3
+  image_picker: ^0.8.5+3
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_test:
