@@ -9,7 +9,7 @@ class AppText extends StatelessWidget {
   final Color color;
   final TextAlign textAlign;
 
-  const AppText(this.text,{Key? key, this.size = 12, this.fontWeight = FontWeight.normal, this.color = AppColors.DARK_900, this.textAlign = TextAlign.justify}) : super(key: key);
+  const AppText(this.text,{Key? key, this.size = 12, this.fontWeight = FontWeight.normal, this.color = AppColors.DARK_900, this.textAlign = TextAlign.start}) : super(key: key);
 
 
   @override
