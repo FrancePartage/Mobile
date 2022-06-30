@@ -26,7 +26,6 @@ class ApiResources {
 
     final response = await http.get(Uri.parse(completeUrl), headers: headers);
 
-    print(response.statusCode);
     if(response.statusCode == 200) {
       return {
         "code": 200,

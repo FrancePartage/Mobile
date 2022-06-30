@@ -89,8 +89,6 @@ class _PageResourceState extends State<PageResource> {
     Map<String,dynamic> mapResource = await api.getRessource(widget.id);
     dynamic jsonData = jsonDecode(mapResource["body"])["data"];
 
-    //print(jsonData);
-
     List<String> stringTags = [];
     for(var tag in jsonData["tags"]) {
       stringTags.add(tag);

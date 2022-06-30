@@ -87,7 +87,7 @@ class _PageHomeState extends State<PageHome> {
       Map<String, dynamic> mapContent = await api.getResources(nbPages);
 
       var jsonData = jsonDecode(mapContent["body"])["data"];
-      print(jsonData);
+
       for(var data in jsonData) {
 
         List<String> stringTags = [];
