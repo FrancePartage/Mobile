@@ -85,15 +85,15 @@ class _PageTagSearchState extends State<PageTagSearch> {
 
       postsList.add(
         CardPost(
-            id: data["id"],
-            title: data["title"],
-            createdAt: DateTime.parse(data["createdAt"]),
-            cover: AppUtils.getCoverLink(data["cover"]),
-            tags: stringTags,
-            favorite: data["liked"],
-            authorId: data["author"]["id"],
-            authorDisplayName: data["author"]["displayName"],
-            authorAvatar: AppUtils.getAvatarLink(data["author"]["avatar"])
+          id: data["id"],
+          title: data["title"],
+          createdAt: DateTime.parse(data["createdAt"]),
+          cover: AppUtils.getCoverLink(data["cover"]),
+          tags: stringTags,
+          favorite: data["liked"],
+          authorId: data["author"]["id"],
+          authorDisplayName: data["author"]["displayName"],
+          authorAvatar: AppUtils.getAvatarLink(data["author"]["avatar"])
         ),
       );
     }

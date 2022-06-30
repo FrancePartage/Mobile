@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:france_partage/api/api_france_partage.dart';
 import 'package:france_partage/models/app_global.dart';
 import 'package:france_partage/models/app_user_infos.dart';
 
 class AppUtils {
-                          //10.176.130.243
-  static const String IP = "192.168.0.16:3333";
-  //static const String IP = "10.176.130.243:3333";
+  static const String IP = "api-francepartage.zapto.org";
 
   // To get the good link to display an avatar
   static String getAvatarLink(String link) {

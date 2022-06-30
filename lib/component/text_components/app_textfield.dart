@@ -14,6 +14,8 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
+  FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,6 +23,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return Container(
       width: (size.width * widget.sizeRatio!),
       child: TextField(
+        focusNode: focusNode,
         obscureText: widget.obscureText!,
         keyboardType: TextInputType.text,
         controller: widget.textController,
