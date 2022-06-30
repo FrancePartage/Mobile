@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:france_partage/component/card_components/card_notification_friend_request.dart';
 import 'package:france_partage/component/component_safe_padding.dart';
+import 'package:france_partage/models/app_global.dart';
 import 'package:france_partage/resources/app_colors.dart';
 import '../api/api_france_partage.dart';
 import '../component/component_app_appbar.dart';
@@ -86,7 +87,7 @@ class _PageNotificationState extends State<PageNotification> {
     for(var data in jsonData) {
       var user = data["participants"][0];
       for(var participant in data["participants"]) {
-        if(participant["id"] != data["requestToId"]) {
+        if(participant["id"] != AppGlobal.userInfos!.id!) {
           user = participant;
         }
       }

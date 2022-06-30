@@ -13,7 +13,7 @@ class ApiResources {
   final String Url = "http://" + AppUtils.IP;
 
   Future<Map<String,dynamic>> getResources(int page) async {
-    String completeUrl = Url + "/resources?page=" + page.toString();
+    String completeUrl = Url + "/resources?page=" + page.toString() + "&limit=10";
 
     const storage = FlutterSecureStorage();
     String? accessToken = await storage.read(key: "accessToken");
@@ -26,6 +26,7 @@ class ApiResources {
 
     final response = await http.get(Uri.parse(completeUrl), headers: headers);
 
+    print(response.statusCode);
     if(response.statusCode == 200) {
       return {
         "code": 200,

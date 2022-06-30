@@ -156,7 +156,7 @@ class _PageUserProfileState extends State<PageUserProfile> {
     for(var data in jsonData) {
       var user = data["participants"][0];
       for (var participant in data["participants"]) {
-        if (participant["id"] != data["requestToId"]) {
+        if (participant["id"] != widget.id) {
           user = participant;
         }
       }
