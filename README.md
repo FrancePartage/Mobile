@@ -28,6 +28,8 @@ Application pour la plateforme FrancePartage
 
 ### Ressources
 
+- [x] Selectionner une cover
+- [x] Lire le contenu d'un editeur Quill
 - [ ] Ajouter une ressource
 - [x] Systeme d'upload d'image dans Quill
 - [x] Afficher les ressources sur la page principale (infinite scroll)
